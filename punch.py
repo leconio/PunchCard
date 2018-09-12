@@ -84,16 +84,18 @@ def get_req_code_json(img_b64):
 
 
 def wait_verify_code(content_json):
-    if requests.post("http://%s:%s/push" % (HOST, PORT), content_json).text == "push success":
+    result = requests.post("http://%s:%s/push" % (HOST, PORT), content_json).text
+    if result == "push success":
         while True:
             code = requests.post("http://%s:%s/getVerifyCode" % (HOST, PORT), content_json).text
             if not code:
                 print("hold...")
                 sleep(10)
-            elif code == "0":
-                exit(0)
             else:
                 return code
+    elif result == "0":
+        print("已经执行成功")
+        exit(0)
     else:
         raise IOError
 
