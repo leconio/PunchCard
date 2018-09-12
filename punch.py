@@ -14,7 +14,7 @@ from selenium.webdriver import DesiredCapabilities
 screen_size = ('1440', '900')
 screen_size2 = (1440, 900)
 
-HOST = "http://lecon.io"
+HOST = "193.112.131.178"
 PORT = 8000
 
 
@@ -84,12 +84,14 @@ def get_req_code_json(img_b64):
 
 
 def wait_verify_code(content_json):
-    if requests.post("%s:%s/push" % (HOST, PORT), content_json).text == "push success":
+    if requests.post("http://%s:%s/push" % (HOST, PORT), content_json).text == "push success":
         while True:
-            code = requests.post("%s:%s/getVerifyCode" % (HOST, PORT), content_json).text
+            code = requests.post("http://%s:%s/getVerifyCode" % (HOST, PORT), content_json).text
             if not code:
                 print("hold...")
                 sleep(10)
+            elif code == "0":
+                exit(0)
             else:
                 return code
     else:
@@ -98,8 +100,8 @@ def wait_verify_code(content_json):
 
 def punch():
     input_btn = browser.find_element_by_id("inputButton")
-    input_btn.click()
-    print(requests.post("%s:%s/success" % (HOST, PORT), input_btn.get_attribute("title").encode('utf-8')).text)
+    browser.execute_script('document.getElementById("inputButton").click()')
+    print(requests.post("http://%s:%s/success" % (HOST, PORT), input_btn.get_attribute("title").encode('utf-8')).text)
 
 
 def test():

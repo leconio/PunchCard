@@ -6,7 +6,7 @@ import json
 import sys
 from http.server import HTTPServer, CGIHTTPRequestHandler
 from socketserver import ThreadingMixIn
-
+import time
 import requests
 from requests.auth import HTTPBasicAuth
 
@@ -20,6 +20,8 @@ class ThreadingHttpServer(ThreadingMixIn, HTTPServer):
 
 verifyCode = ""
 
+TODAY = ""
+
 
 class FDHTTPRequestHandler(CGIHTTPRequestHandler):
 
@@ -31,19 +33,24 @@ class FDHTTPRequestHandler(CGIHTTPRequestHandler):
 
     def do_POST(self):
         global verifyCode
+        global TODAY
         if self.path == "/push":
-            post_data = self.rfile.read(int(self.headers['Content-Length']))
-            result = "error"
-            try:
-                self.send_push(json.loads(post_data.decode()))
-                result = "push success"
-            except EOFError as e:
-                print(e)
-            self.html(result)
+            if time.strftime("%Y-%m-%d", time.localtime()) == TODAY:
+                self.html("0")
+            else:
+                post_data = self.rfile.read(int(self.headers['Content-Length']))
+                result = "error"
+                try:
+                    self.send_push(json.loads(post_data.decode()))
+                    result = "push success"
+                except EOFError as e:
+                    print(e)
+                self.html(result)
         elif self.path == "/success":
             post_data = self.rfile.read(int(self.headers['Content-Length'])).decode()
             self.html("msg: " + post_data)
             self.send_push(json.loads(self.get_req_code_json(post_data)))
+            TODAY = time.strftime("%Y-%m-%d", time.localtime())
             print("通知客户端 success")
         elif self.path == "/getVerifyCode":
             # 机器请求验证码
