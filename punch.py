@@ -14,6 +14,9 @@ from selenium.webdriver import DesiredCapabilities
 screen_size = ('1440', '900')
 screen_size2 = (1440, 900)
 
+HOST = "http://lecon.io"
+PORT = 8000
+
 
 class get_chroem:
     def __init__(self, *args, **kwargs):
@@ -81,9 +84,9 @@ def get_req_code_json(img_b64):
 
 
 def wait_verify_code(content_json):
-    if requests.post("http://lecon.io:8000/push", content_json).text == "push success":
+    if requests.post("%s:%s/push" % (HOST, PORT), content_json).text == "push success":
         while True:
-            code = requests.post("http://lecon.io:8000/getVerifyCode", content_json).text
+            code = requests.post("%s:%s/getVerifyCode" % (HOST, PORT), content_json).text
             if not code:
                 print("hold...")
                 sleep(10)
@@ -96,7 +99,7 @@ def wait_verify_code(content_json):
 def punch():
     input_btn = browser.find_element_by_id("inputButton")
     input_btn.click()
-    print(requests.post("http://lecon.io:8000/success", input_btn.get_attribute("title").encode('utf-8')).text)
+    print(requests.post("%s:%s/success" % (HOST, PORT), input_btn.get_attribute("title").encode('utf-8')).text)
 
 
 def test():
