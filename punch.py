@@ -18,7 +18,7 @@ HOST = "193.112.131.178"
 PORT = 8000
 
 
-class get_chroem:
+class Chrome:
     def __init__(self, *args, **kwargs):
         self.browser = None
         self.args = args
@@ -46,7 +46,7 @@ class get_chroem:
         return self.browser
 
 
-browser = get_chroem().get_chrome()
+browser = Chrome().get_chrome()
 browser.get("http://hos.sf-express.com")
 login_jsessionid = browser.get_cookie("JSESSIONID")
 
@@ -85,11 +85,13 @@ def get_req_code_json(img_b64):
 
 def wait_verify_code(content_json):
     result = requests.post("http://%s:%s/push" % (HOST, PORT), content_json).text
+    hold = 0  # 100s必须有结果，不然就结束
     if result == "push success":
-        while True:
+        while hold < 10:
             code = requests.post("http://%s:%s/getVerifyCode" % (HOST, PORT), content_json).text
             if not code:
                 print("hold...")
+                hold += 1
                 sleep(10)
             else:
                 return code
