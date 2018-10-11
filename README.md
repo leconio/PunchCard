@@ -22,4 +22,6 @@
 - `punch.py`为打卡机执行脚本，你可以使用contrab命令来周期性执行他。
 - server目录为中转服务器。写好了Dockerfile文件，可以直接部署在容器中。
 - PrivatePunch 为Android手机端。放到AndroidStudio里边可以直接Run
+
+
   [1]: https://pics-1256269247.cos.ap-guangzhou.myqcloud.com/punchcard.png
