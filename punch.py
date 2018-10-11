@@ -52,8 +52,8 @@ login_jsessionid = browser.get_cookie("JSESSIONID")
 
 
 def get_verify_image():
-    browser.execute_script("document.getElementById('username').value = '80002462'")
-    browser.execute_script("document.getElementById('password').value = 'Zhangsiwole6'")
+    browser.execute_script("document.getElementById('username').value = 'youusername'")
+    browser.execute_script("document.getElementById('password').value = 'youpassword'")
     verify_img = browser.find_element_by_class_name("yzmImg")
 
     browser.save_screenshot('/Users/spawn/PycharmProjects/PunchCard/tmp1.png')
