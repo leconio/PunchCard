@@ -34,6 +34,7 @@ class FDHTTPRequestHandler(CGIHTTPRequestHandler):
     def do_POST(self):
         global verifyCode
         global TODAY
+        print(self.path)
         if self.path == "/push":
             if time.strftime("%Y-%m-%d", time.localtime()) == TODAY:
                 self.html("0")

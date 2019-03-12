@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initComponent() {
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://193.112.131.178:8000/")
+                .baseUrl("http://punch.leconio.com:8000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
