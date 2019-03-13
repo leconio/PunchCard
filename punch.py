@@ -2,7 +2,7 @@
 # encoding:utf-8
 import base64
 import json
-import sys
+from datetime import datetime
 from io import BytesIO
 from time import sleep
 
@@ -138,5 +138,8 @@ def test():
 
 
 if __name__ == '__main__':
-    punch_mode = len(sys.argv)
+    if datetime.now().hour > 12:
+        punch_mode = 1
+    else:
+        punch_mode = 0
     test()
