@@ -18,7 +18,7 @@ screen_size = ('1440', '900')
 screen_size2 = (1440, 900)
 
 HOST = "punch.leconio.com"
-PORT = 8000
+PORT = 80000
 
 # 0 签到
 # other 签退
@@ -60,8 +60,8 @@ login_jsessionid = browser.get_cookie("JSESSIONID")
 
 
 def get_verify_image():
-    browser.execute_script("document.getElementById('username').value = '80002462'")
-    browser.execute_script("document.getElementById('password').value = 'Zhangsiwole8'")
+    browser.execute_script("document.getElementById('username').value = 'sss'")
+    browser.execute_script("document.getElementById('password').value = 'sss'")
     verify_img = browser.find_element_by_class_name("yzmImg")
 
     browser.save_screenshot('/Users/spawn/PycharmProjects/PunchCard/tmp1.png')
