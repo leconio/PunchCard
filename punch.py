@@ -121,18 +121,20 @@ def punch_out():
 
 
 def test():
-    code = wait_verify_code(get_req_code_json(get_verify_image()))
-    print("code :" + code)
-    browser.execute_script("document.getElementById('verifyCode').value = '%s'" % code)
+    try:
+        code = wait_verify_code(get_req_code_json(get_verify_image()))
+        print("code :" + code)
+        browser.execute_script("document.getElementById('verifyCode').value = '%s'" % code)
 
-    locator = (By.ID, 'loginForm')
-    WebDriverWait(browser, 10, 0.5).until(EC.presence_of_element_located(locator))
-    browser.execute_script("login()")
-
-    if punch_mode == 0:
-        punch()
-    else:
-        punch_out()
+        locator = (By.ID, 'loginForm')
+        WebDriverWait(browser, 10, 0.5).until(EC.presence_of_element_located(locator))
+        browser.execute_script("login()")
+        if punch_mode == 0:
+            punch()
+        else:
+            punch_out()
+    except requests.exceptions.ConnectionError:
+        test()
 
 
 if __name__ == '__main__':
