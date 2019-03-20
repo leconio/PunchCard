@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- 任务名称 这个一定不能重复，否则无法被成功创建，系统会告诉你已经有同名的任务了！ -->
+    <key>Label</key>    
+    <string>io.lecon.punch_1</string>
+    <!-- 任务加载时就默认启动一次 -->
+    <key>RunAtLoad</key>
+    <false/>
+    <!-- 任务内容 -->
+    <key>ProgramArguments</key>
+    <array>     
+    <!-- 执行一个脚本_(:зゝ∠)_脚本都可以执行了，基本上什么羞羞的事情都可以做了，脚本内容在最下面贴出 -->
+      <string>/Users/spawn/PycharmProjects/PunchCard/launch.sh</string>
+    </array>
+  
+    <!-- 
+        日历的形式执行任务
+        Minute <integer>    分钟
+        Hour <integer>      小时
+        Day <integer>       哪天
+        Weekday <integer>   周几(0和7都表示周日)
+        Month <integer>     几月
+        = = 感觉挺麻烦，在下面说几个例子方便理解
+    -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Weekday</key>  
+            <integer>1</integer>
+            <key>Hour</key>     
+            <integer>20</integer>
+            <key>Minute</key>   
+            <string>0</string>
+        </dict>
+        <dict>
+            <key>Weekday</key>  
+            <integer>2</integer>
+            <key>Hour</key>     
+            <integer>20</integer>
+            <key>Minute</key>   
+            <string>0</string>
+        </dict>
+        <dict>
+            <key>Weekday</key>  
+            <integer>3</integer>
+            <key>Hour</key>     
+            <integer>20</integer>
+            <key>Minute</key>   
+            <string>0</string>
+        </dict>
+        <dict>
+            <key>Weekday</key>  
+            <integer>4</integer>
+            <key>Hour</key>     
+            <integer>20</integer>
+            <key>Minute</key>   
+            <string>0</string>
+        </dict>
+        <dict>
+            <key>Weekday</key>  
+            <integer>5</integer>
+            <key>Hour</key>     
+            <integer>20</integer>
+            <key>Minute</key>   
+            <string>0</string>
+        </dict>
+    </array>
+    <!-- 输出日志路径 -->
+    <key>StandardOutPath</key>
+    <string>/Users/spawn/private/punch/stdoutlog</string>
+    <!-- 异常日志路径 -->
+    <key>StandardErrorPath</key>
+    <string>/Users/spawn/private/punch/stderrlog</string>
+</dict>
+</plist>

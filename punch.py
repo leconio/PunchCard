@@ -2,6 +2,7 @@
 # encoding:utf-8
 import base64
 import json
+import logging
 from datetime import datetime
 from io import BytesIO
 from time import sleep
@@ -10,9 +11,6 @@ import requests
 from PIL import Image
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 screen_size = ('1440', '900')
 screen_size2 = (1440, 900)
@@ -23,6 +21,10 @@ PORT = 8000
 # 0 签到
 # other 签退
 punch_mode = 0
+retry_time = 5
+
+logging.basicConfig(level=logging.DEBUG, filename='/Users/spawn/PycharmProjects/PunchCard/run.log', filemode='w',
+                    format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 class Chrome:
@@ -61,7 +63,7 @@ login_jsessionid = browser.get_cookie("JSESSIONID")
 
 def get_verify_image():
     browser.execute_script("document.getElementById('username').value = '80002462'")
-    browser.execute_script("document.getElementById('password').value = 'Zhangsiwole8'")
+    browser.execute_script("document.getElementById('password').value = 'Zhangsiwole7'")
     verify_img = browser.find_element_by_class_name("yzmImg")
 
     browser.save_screenshot('/Users/spawn/PycharmProjects/PunchCard/tmp1.png')
@@ -98,13 +100,13 @@ def wait_verify_code(content_json):
         while hold < 10:
             code = requests.post("http://%s:%s/getVerifyCode" % (HOST, PORT), content_json).text
             if not code:
-                print("hold...")
+                logging.debug("hold...")
                 hold += 1
                 sleep(10)
             else:
                 return code
     elif result == "0":
-        print("已经执行成功")
+        logging.debug("已经执行成功")
         exit(0)
     else:
         raise IOError
@@ -112,29 +114,29 @@ def wait_verify_code(content_json):
 
 def punch():
     browser.execute_script('document.getElementById("inputButton").click()')
-    print(requests.post("http://%s:%s/success" % (HOST, PORT), "签到成功".encode('utf-8')).text)
+    logging.debug(requests.post("http://%s:%s/success" % (HOST, PORT), "punch up successful").text)
 
 
 def punch_out():
     browser.execute_script('document.getElementById("outputButton").click()')
-    print(requests.post("http://%s:%s/success" % (HOST, PORT), "签退成功".encode('utf-8')).text)
+    logging.debug(requests.post("http://%s:%s/success" % (HOST, PORT), "punch down successful").text)
 
 
 def test():
+    global retry_time
     try:
         code = wait_verify_code(get_req_code_json(get_verify_image()))
-        print("code :" + code)
+        logging.debug("code :" + code)
         browser.execute_script("document.getElementById('verifyCode').value = '%s'" % code)
-
-        locator = (By.ID, 'loginForm')
-        WebDriverWait(browser, 10, 0.5).until(EC.presence_of_element_located(locator))
         browser.execute_script("login()")
         if punch_mode == 0:
             punch()
         else:
             punch_out()
-    except requests.exceptions.ConnectionError:
-        test()
+    except Exception:
+        retry_time -= 1
+        if retry_time > 0:
+            test()
 
 
 if __name__ == '__main__':
